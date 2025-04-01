@@ -1,0 +1,30 @@
+# .github/workflows/multi-arch.yml
+
+name: Multi-Architecture Runner Check # Workflow name displayed on GitHub
+
+on: # Triggers for the workflow
+  push: # Run on pushes to any branch
+    branches: [ main ]
+  pull_request: # Run on pull requests targeting the main branch
+    branches: [ main ]
+  workflow_dispatch: # Allow manual triggering from the Actions tab
+
+jobs:
+  check_architecture: # Job ID
+    name: Check Runner Architecture (${{ matrix.arch }}) # Job name displayed on GitHub, including matrix variable
+    runs-on: ${{ matrix.os }} # Define the runner OS based on the matrix
+
+    strategy:
+      fail-fast: false # Prevent other matrix jobs from being cancelled if one fails
+      matrix: # Define the matrix combinations
+        include: # Explicitly define each combination
+          - arch: amd64
+            os: ubuntu-24.04 # x86_64/amd64 Ubuntu runner
+          - arch: arm64
+            os: ubuntu-24.04-arm # ARM64 Ubuntu runner
+
+    steps:
+      - name: Output Architecture # Step name
+        run: | # Shell command(s) to execute
+          echo "Running on architecture: $(dpkg --print-architecture)"
+          echo "Runner OS label used: ${{ matrix.os }}"
