@@ -4,9 +4,9 @@ name: Multi-Architecture Runner Check # Workflow name displayed on GitHub
 
 on: # Triggers for the workflow
   push: # Run on pushes to any branch
-    branches: [ main ]
+    branches: [main]
   pull_request: # Run on pull requests targeting the main branch
-    branches: [ main ]
+    branches: [main]
   workflow_dispatch: # Allow manual triggering from the Actions tab
 
 jobs:
@@ -28,3 +28,8 @@ jobs:
         run: | # Shell command(s) to execute
           echo "Running on architecture: $(dpkg --print-architecture)"
           echo "Runner OS label used: ${{ matrix.os }}"
+          # Append info to job summary
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "## Job Summary" >> $GITHUB_STEP_SUMMARY
+          echo "- Architecture: $(dpkg --print-architecture)" >> $GITHUB_STEP_SUMMARY
+          echo "- Runner OS: ${{ matrix.os }}" >> $GITHUB_STEP_SUMMARY
